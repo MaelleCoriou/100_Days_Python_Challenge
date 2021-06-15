@@ -1,11 +1,23 @@
 #Write your code below this line 👇
 
 def prime_checker(number):
-  if number /1 == number and number %number == 0 and number %3 != 0:
+  if number %number == 0 and number %3 != 0:
     print("It's a prime number.")
   else:
     print("It's not a prime number.")
 
+## ------ Angela's code ----- ##
+
+def prime_checker(number):
+  is_prime = True
+  for i in range (2, number -1):
+    if number % i == 0:
+      is_prime = False
+  if is_prime:
+    # if it's True
+    print("It's a prime number.")
+  else:
+    print("It's not a prime number.")
 
 #Write your code above this line 👆
     
