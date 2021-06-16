@@ -1,6 +1,8 @@
 from art import logo
 
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 
+			't', 'u', 'v', 'w', 'x', 'y', 'z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 
+			'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 def caesar(start_text, shift_amount, cipher_direction):
 	end_text = ""
@@ -35,7 +37,7 @@ while game == True:
 	text = input("Type your message:\n").lower()
 	shift = int(input("Type the shift number:\n"))
 	caesar(start_text=text, shift_amount=shift, cipher_direction=direction)
-	start = input("Do you want to restart Cipher? 'Yes' or 'No': \n")
+	start = input("Do you want to restart Cipher? 'Yes' or 'No': \n").lower()
 
 	if start == "yes":
 		game = True
