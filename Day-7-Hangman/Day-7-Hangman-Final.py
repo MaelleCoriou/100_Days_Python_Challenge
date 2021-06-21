@@ -28,7 +28,7 @@ print(hangman_art.logo)
 # To clean screen
 def clear_screen():
     os.system('cls')
-    
+
 # Create blanks
 display = []
 for _ in range(word_length):
@@ -36,46 +36,47 @@ for _ in range(word_length):
 
 while not end_of_game:
     guess = input("Guess a letter: ").lower()
-        
-    clear_screen()
     
-    print(hangman_art.logo)
-    
-    # If the user entered a letter more than once
-    guessed += guess
-    count = guessed.count(guess)
+clear_screen()
 
-    if guess in guessed :   
-        if count > 1:
-            print(f"You've already guessed the letter {guess}, try another one.")
+print(hangman_art.logo)
 
-    # ----- Angela's solution ----- #
-    
-    # if guess in display:
-    #     print(f"You've already guessed {guess}.")  
+# If the user entered a letter more than once
+guessed += guess
+count = guessed.count(guess)
 
-    # Check guessed letter
-    for position in range(word_length):
-        letter = chosen_word[position]
-        #print(f"Current position: {position}\n Current letter: {letter}\n Guessed letter: {guess}")
-        if letter == guess:
-            display[position] = letter
+if guess in guessed :   
+    if count > 1:
+        print(f"You've already guessed the letter {guess}, try another one.")
 
-    # Check if user is wrong.
-    if guess not in chosen_word:
-        # If the letter not in chosen_word :
-        lives -= 1
-        print(f"The letter {guess} is not in the word. you lose a life.")
-        if lives == 0:
-            end_of_game = True
-            print("You lose.")
+# ----- Angela's solution ----- #
 
-    # Join all elements in the list, turn it into a String.
-    print(f"{' '.join(display)}")
+# if guess in display:
+#     print(f"You've already guessed {guess}.")  
 
-    # Check if user has got all letters.
-    if "_" not in display:
+
+# Check guessed letter
+for position in range(word_length):
+    letter = chosen_word[position]
+    #print(f"Current position: {position}\n Current letter: {letter}\n Guessed letter: {guess}")
+    if letter == guess:
+        display[position] = letter
+
+# Check if user is wrong.
+if guess not in chosen_word:
+    # If the letter not in chosen_word :
+    lives -= 1
+    print(f"The letter {guess} is not in the word. you lose a life.")
+    if lives == 0:
         end_of_game = True
-        print("You win.")
+        print("You lose.")
 
-    print(hangman_art.stages[lives])
+# Join all elements in the list, turn it into a String.
+print(f"{' '.join(display)}")
+
+# Check if user has got all letters.
+if "_" not in display:
+    end_of_game = True
+    print("You win.")
+
+print(hangman_art.stages[lives])

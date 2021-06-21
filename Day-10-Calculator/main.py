@@ -36,7 +36,7 @@ def calculator():
 		# Function getting related operation function to symbol chosen
 		calculation_function = operations[operation_symbol]
 
-		# Saving calculation result to a variable
+		# Saving calculation result to a variable using functions
 		answer = calculation_function(num1, num2)
 
 		print(f"{num1} {operation_symbol} {num2} = {answer}")
