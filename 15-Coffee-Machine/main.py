@@ -30,16 +30,16 @@ def check_resources(report, order):
 def return_resources(report, order):
     """Returns the missing resource"""
     if order == "espresso":
-        if report["water"] >= MENU[order]["ingredients"]["water"]:
+        if report["water"] <= MENU[order]["ingredients"]["water"]:
             return "water"
-        elif report["coffee"] >= MENU[order]["ingredients"]["coffee"]:
+        elif report["coffee"] <= MENU[order]["ingredients"]["coffee"]:
             return "coffee"
     elif order == "cappuccino" or order == "latte":
-        if report["water"] >= MENU[order]["ingredients"]["water"]:
+        if report["water"] <= MENU[order]["ingredients"]["water"]:
             return "water"
-        elif report["coffee"] >= MENU[order]["ingredients"]["coffee"]:
+        elif report["coffee"] <= MENU[order]["ingredients"]["coffee"]:
             return "coffee"
-        elif report["milk"] >= MENU[order]["ingredients"]["milk"]:
+        elif report["milk"] <= MENU[order]["ingredients"]["milk"]:
             return "milk"
 
 
@@ -70,10 +70,13 @@ def coffee_machine():
     global MONEY
     choice = input("What would you like? (espresso/latte/cappuccino): ").lower()
 
+    # Report of the current resources
+    report_resources = report_status(resources, MONEY)
+
     # Inform if the order isn't valid
     if choice == "report":
         # Print report of the coffee machine
-        print(report_status(resources, MONEY))
+        print(report_resources)
         choice = input("What would you like? (espresso/latte/cappuccino): ").lower()
     elif choice == "off":
         # Turn off the program
@@ -84,9 +87,6 @@ def coffee_machine():
 
     amount = cost(choice)
     print(f"Please insert: €{amount}")
-
-    # Report of the current resources
-    report_resources = report_status(resources, MONEY)
 
     # Check if resources are sufficient for the order
     status_coffee_machine = check_resources(resources, choice)
@@ -106,7 +106,7 @@ def coffee_machine():
             print("Sorry not enough money inserted. Money refunded.")
             coffee_machine()
         else:
-            refund = paid - amount
+            refund = round(paid - amount, 2)
             print(f"Here is €{refund} in change")
             print(f"Here is your {choice} ☕. Enjoy!")
             update_resources(resources, choice)
