@@ -53,6 +53,7 @@ while len(guessed) < 50:
         show_state(data, missed_states, correction)
         break
 
+correction.clear()
 turtle.write(f"Final score {len(guessed)}/50", font="50", align="center")
 turtle.mainloop()
 
