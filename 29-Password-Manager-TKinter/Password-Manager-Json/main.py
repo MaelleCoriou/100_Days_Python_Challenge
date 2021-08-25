@@ -6,6 +6,7 @@ import pyperclip
 
 user = "user@gmail.com"
 
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 
@@ -28,6 +29,38 @@ def create_password():
     input_password.insert(0, password)
     # Automatically copies new password to be pasted somewhere else
     pyperclip.copy(password)
+
+
+# ---------------------------- SEARCH PASSWORD ------------------------------- #
+
+
+def search_pw():
+    # Get entries inputs info
+    website = input_website.get()
+    try:
+        with open("data.json", "r") as f:
+            # reading file to get old data as dic
+            data = json.load(f)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Website Search",
+                            message=f"No info registered yet.")
+    else:
+        website_check = ""
+
+        for (key, value) in data.items():
+            if key == website.capitalize() or key == website.upper() or key == website.lower():
+                website_check += f"Email: {data[key]['email']},\nPassword: {data[key]['password']}"
+                messagebox.showinfo(title="Website Search",
+                                    message=f"Website {key} registered.\n{website_check}\n")
+        if len(website_check) == 0:
+            messagebox.showinfo(title="Website Search", message="Website not found")
+
+    # Other way tto get values :
+    # if website in data:
+    #    email = data[website]['email']
+    #    password = data[website]['password']
+    #    messagebox.showinfo(title="Website Search",
+    #                        message=f"Email: {email}.\nPassword: {password}\n")
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -64,9 +97,26 @@ def save_entry():
     if len(message_error) > 0:
         messagebox.showerror(title="Missing Info", message=f"Empty field(s) {message_error}\nPlease check again.")
     else:
-        # Entries to json file
-        with open("data.json", "w") as f:
-            json.dump(data_json, f)
+        try:
+            # Entries to existing json file
+            with open("data.json", "r") as f:
+                # reading file to get old data as dic
+                data = json.load(f)
+        # If file doesn't exists
+        except FileNotFoundError:
+            with open("data.json", "w") as f:
+                # create file
+                json.dump(data_json, f, indent=4)
+        # Update file with data
+        else:
+            # update data with adding new data
+            data.update(data_json)
+
+            with open("data.json", "w") as f:
+                # save data to file
+                json.dump(data, f, indent=4)
+        # To do anyway
+        finally:
             # Clear entries
             input_website.delete(0, END)
             input_password.delete(0, END)
@@ -99,24 +149,27 @@ password_label = Label(text="Password: ", bg="white")
 password_label.grid(column=0, row=3)
 
 # Input entries
-input_website = Entry()
-input_website.grid(column=1, row=1, columnspan=2, sticky=W + E)
+input_website = Entry(width=35, relief="groove")
+input_website.grid(column=1, row=1, columnspan=2, sticky=W)
 # Get the cursor to the first input
 input_website.focus()
 
-input_email = Entry()
+input_email = Entry(width=35, relief="groove")
 # Set up the email of the user, index 0 to insert text from the beginning or END to insert from the end
 input_email.insert(0, user)
 input_email.grid(column=1, row=2, columnspan=2, sticky=W + E)
 
-input_password = Entry(width=36)
-input_password.grid(column=1, row=3)
+input_password = Entry(width=35, relief="groove")
+input_password.grid(column=1, row=3, sticky=W)
 
 # Buttons
-button_password = Button(text="Generate Password", bg="white", width=14, relief="flat", command=create_password)
+button_search = Button(text="Search", bg="white", width=14, relief="groove", bd=1, command=search_pw)
+button_search.grid(column=2, row=1, sticky=E)
+
+button_password = Button(text="Generate Password", bg="white", width=14, relief="groove", bd=1, command=create_password)
 button_password.grid(column=2, row=3, sticky=E)
 
-button_add = Button(text="Add", bg="white", command=save_entry)
+button_add = Button(text="Add", bg="white", bd=1, relief="groove", command=save_entry)
 button_add.grid(column=1, row=4, columnspan=2, sticky=W + E)
 
 window.mainloop()
