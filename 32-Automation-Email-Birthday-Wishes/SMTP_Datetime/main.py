@@ -1,7 +1,7 @@
 # import smtplib
 #
-# my_email = "mallouco.44@gmail.com"
-# password = "Mickey3379"
+# my_email = "xxxx@gmail.com"
+# password = "xxxx"
 #
 # # Connection to email provider server
 # # Google search SMTP of provider to get the proper server name
