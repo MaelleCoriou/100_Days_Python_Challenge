@@ -8,8 +8,8 @@ birthdays = pd.read_csv("birthdays.csv", encoding="UTF8 ")
 
 # Today's date
 now = dt.datetime.now()
-month = float(now.month)
-day = float(now.day)
+month = now.month
+day = now.day
 
 # Find today's birthday
 to_celebrate = [row for index, row in birthdays.iterrows() if row.month == month and row.day == day]
