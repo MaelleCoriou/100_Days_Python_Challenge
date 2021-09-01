@@ -1,11 +1,5 @@
 import smtplib
 import os
-import pw
-
-# Set environment variables with password
-# os.environ['GMAIL_ADDRESS'] = 'xxx'
-# os.environ['GMAIL_PASSWORD'] = 'xxxx'
-pw.os_variable()
 
 # Get environment variables
 EMAIL = os.getenv('GMAIL_ADDRESS')

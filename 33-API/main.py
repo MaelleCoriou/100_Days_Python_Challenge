@@ -8,8 +8,11 @@
 import requests
 from datetime import datetime
 import SMTP_Set_up
-from pw import CONTACT
 import time
+import os
+
+# Contact address
+CONTACT = os.environ.get("HOTMAIL_ADDRESS")
 
 # My position
 nantes_latitude = 47.218371

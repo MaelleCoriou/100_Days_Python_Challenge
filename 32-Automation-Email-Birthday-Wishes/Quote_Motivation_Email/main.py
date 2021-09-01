@@ -2,15 +2,11 @@ import smtplib
 import datetime as dt
 from random import choice
 import os
-import pw
-
-
-# Set environment variables
-pw.os_variable()
 
 # Get environment variables
 EMAIL = os.getenv('GMAIL_ADDRESS')
 PASSWORD = os.environ.get('GMAIL_PASSWORD')
+CONTACT = os.environ.get("YAHOO_ADDRESS")
 
 
 def send_email(message):
@@ -21,7 +17,7 @@ def send_email(message):
         connection.login(user=EMAIL, password=PASSWORD)
         # Send email, to set up the subject of th email: msg="subject:text followed by \n\n message"
         connection.sendmail(from_addr=EMAIL,
-                            to_addrs="maellecoriou@yahoo.com",
+                            to_addrs=CONTACT,
                             msg=message)
 
 
