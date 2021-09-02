@@ -4,8 +4,8 @@ from twilio.rest import Client
 from twilio.http.http_client import TwilioHttpClient
 import datetime as dt
 
-STOCK = "GSAT"
-COMPANY_NAME = "Globalstar Inc"
+STOCK = "SCX"
+COMPANY_NAME = "Starrett"
 
 # --------------------------- TwilioE SET UP --------------------------------#
 # # Proxy client for PythonAnywhere automation
@@ -51,8 +51,9 @@ yesterday_closing = float(data_stock[yesterday]["4. close"])
 two_days_closing = float(data_stock[two_days_ago]["4. close"])
 
 # Stock variation
-diff = round(yesterday_closing - two_days_closing)
-variation = (diff / yesterday_closing) * 100
+diff = yesterday_closing - two_days_closing
+variation = round((diff / yesterday_closing) * 100)
+print(variation)
 
 # --------------------------- NEWS SET UP --------------------------------#
 # Get News API key to get latest news info
@@ -73,26 +74,27 @@ data_news = request_news.json()["articles"]
 
 # Get the 3 most popular news
 top_3 = data_news[0:3]
+print(top_3)
 
 # Set message, SMS alert conditions and send message
 text = ""
-if variation >= 5 or variation <= -5:
+if variation >= 2 or variation <= -2:
     for article in top_3:
-        if variation >= 5:
-            text = f"\n{COMPANY_NAME}: 🔺{variation}%\n"
-        elif variation <= -5:
+        if variation >= 2:
+            text += f"\n{COMPANY_NAME}: 🔺{variation}%\n"
+        elif variation <= -2:
             text = f"\n{COMPANY_NAME}: 🔻{variation}%\n"
         text += f"Headline: {article['title']}\n"
         text += f"Brief: {article['description']}\n"
-        # Set Twilio SMS if conditions met
-        message = client.messages \
-            .create(
-                    body=f"{text}",
-                    from_="+19473338388",
-                    to=contact
-                    )
-        print(message.status)
+    # Set Twilio SMS if conditions met
+    message = client.messages \
+        .create(
+                body=f"{text}",
+                from_="+19473338388",
+                to=contact
+                )
+    print(message.status)
 
 print(yesterday_closing)
 print(two_days_closing)
-print(data_news)
+print(top_3)
