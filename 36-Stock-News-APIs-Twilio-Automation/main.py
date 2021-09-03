@@ -7,7 +7,7 @@ import datetime as dt
 STOCK = "SCX"
 COMPANY_NAME = "Starrett"
 
-# --------------------------- TwilioE SET UP --------------------------------#
+# --------------------------- Twilio SET UP --------------------------------#
 # # Proxy client for PythonAnywhere automation
 # proxy_client = TwilioHttpClient()
 # proxy_client.session.proxies = {"https": os.environ["https_proxy"]}
@@ -30,71 +30,75 @@ client = Client(account_sid, auth_token)  # http_client=proxy_client parameter t
 # Get Alpha Vantage API key to get stock info
 key_stock = os.environ.get("STOCK_ALPHA_VANTAGE_KEY")
 
-# 7 days forecast:
-parameters_stock = {
-    "function": "TIME_SERIES_DAILY",
-    "symbol": STOCK,
-    "apikey": key_stock
-}
+try:
+    # 7 days forecast:
+    parameters_stock = {
+        "function": "TIME_SERIES_DAILY",
+        "symbol": STOCK,
+        "apikey": key_stock
+    }
 
-# Connect with API key
-request_stock = requests.get("https://www.alphavantage.co/query?", params=parameters_stock)
-data_stock = request_stock.json()["Time Series (Daily)"]
+    # Connect with API key
+    request_stock = requests.get("https://www.alphavantage.co/query?", params=parameters_stock)
+    data_stock = request_stock.json()["Time Series (Daily)"]
 
-# Set today and yesterday variables
-today = dt.datetime.now().date()
-yesterday = str(today - dt.timedelta(days=1))
-two_days_ago = str(today - dt.timedelta(days=2))
+    # Set today and yesterday variables
+    today = dt.datetime.now().date()
+    yesterday = str(today - dt.timedelta(days=1))
+    two_days_ago = str(today - dt.timedelta(days=2))
 
-# Get today and yesterday stock values at close time
-yesterday_closing = float(data_stock[yesterday]["4. close"])
-two_days_closing = float(data_stock[two_days_ago]["4. close"])
+    # Get today and yesterday stock values at close time
+    yesterday_closing = float(data_stock[yesterday]["4. close"])
+    two_days_closing = float(data_stock[two_days_ago]["4. close"])
 
-# Stock variation
-diff = yesterday_closing - two_days_closing
-variation = round((diff / yesterday_closing) * 100)
-print(variation)
+    # Stock variation
+    diff = yesterday_closing - two_days_closing
+    variation = round((diff / yesterday_closing) * 100)
+    print(variation)
 
-# --------------------------- NEWS SET UP --------------------------------#
-# Get News API key to get latest news info
-key_news = os.environ.get("NEWS_API_KEY")
+except KeyError:
+    print("No stock closing value available.")
 
-# 7 days forecast:
-parameters_news = {
-    "qInTitle": COMPANY_NAME,
-    "sortBy": "popularity",
-    "language": "en",
-    "from": yesterday,
-    "apiKey": key_news
-}
+else:
+    # --------------------------- NEWS SET UP --------------------------------#
+    # Get News API key to get latest news info
+    key_news = os.environ.get("NEWS_API_KEY")
 
-# Connect with API key
-request_news = requests.get("https://newsapi.org/v2/everything?", params=parameters_news)
-data_news = request_news.json()["articles"]
+    # 7 days forecast:
+    parameters_news = {
+        "qInTitle": COMPANY_NAME,
+        "sortBy": "popularity",
+        "language": "en",
+        "from": yesterday,
+        "apiKey": key_news
+    }
 
-# Get the 3 most popular news
-top_3 = data_news[0:3]
-print(top_3)
+    # Connect with API key
+    request_news = requests.get("https://newsapi.org/v2/everything?", params=parameters_news)
+    data_news = request_news.json()["articles"]
 
-# Set message, SMS alert conditions and send message
-text = ""
-if variation >= 2 or variation <= -2:
-    for article in top_3:
-        if variation >= 2:
-            text += f"\n{COMPANY_NAME}: 🔺{variation}%\n"
-        elif variation <= -2:
-            text = f"\n{COMPANY_NAME}: 🔻{variation}%\n"
-        text += f"Headline: {article['title']}\n"
-        text += f"Brief: {article['description']}\n"
-    # Set Twilio SMS if conditions met
-    message = client.messages \
-        .create(
-                body=f"{text}",
-                from_="+19473338388",
-                to=contact
-                )
-    print(message.status)
+    # Get the 3 most popular news
+    top_3 = data_news[0:3]
 
-print(yesterday_closing)
-print(two_days_closing)
-print(top_3)
+    # Set message, SMS alert conditions and send message
+    text = ""
+    if variation >= 2 or variation <= -2:
+        for article in top_3:
+            if variation >= 2:
+                text += f"\n{COMPANY_NAME}: 🔺{variation}%\n"
+            elif variation <= -2:
+                text = f"\n{COMPANY_NAME}: 🔻{variation}%\n"
+            text += f"Headline: {article['title']}\n"
+            text += f"Brief: {article['description']}\n"
+        # Set Twilio SMS if conditions met
+        message = client.messages \
+            .create(
+                    body=f"{text}",
+                    from_="+19473338388",
+                    to=contact
+                    )
+        print(message.status)
+
+    print(yesterday_closing)
+    print(two_days_closing)
+    print(top_3)
