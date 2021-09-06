@@ -30,7 +30,7 @@ request_body = {
     "age": 41
 }
 
-# Get Calories regarding request body
+# Get info regarding request body and input
 exercise_url = requests.post("https://trackapi.nutritionix.com/v2/natural/exercise",
                              headers=header,
                              json=request_body)
@@ -62,7 +62,7 @@ sheety_url = requests.get(ENDPOINT,
 print(sheety_url.text)
 
 
-# Add new line POST request
+# Add new line POST request to spreadsheet google drive via sheety
 new_line = requests.post(ENDPOINT,
                          json=new_row,
                          headers=header)
