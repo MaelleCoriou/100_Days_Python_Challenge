@@ -8,11 +8,12 @@ STOCK = "SCX"
 COMPANY_NAME = "Starrett"
 
 # --------------------------- Twilio SET UP --------------------------------#
+
 # # Proxy client for PythonAnywhere automation
 # proxy_client = TwilioHttpClient()
 # proxy_client.session.proxies = {"https": os.environ["https_proxy"]}
 
-# Get os variables for Twilio
+# Get os variables for Twilio, website : https://console.twilio.com
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
 auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 
@@ -27,11 +28,12 @@ contact = os.environ.get("PHONE")
 client = Client(account_sid, auth_token)  # http_client=proxy_client parameter to add for PythonAnywhere
 
 # --------------------------- ALPHA VANTAGE SET UP --------------------------------#
+
 # Get Alpha Vantage API key to get stock info
 key_stock = os.environ.get("STOCK_ALPHA_VANTAGE_KEY")
 
 try:
-    # 7 days forecast:
+    # Get stock values, documentation https://www.alphavantage.co/documentation/
     parameters_stock = {
         "function": "TIME_SERIES_DAILY",
         "symbol": STOCK,
@@ -61,10 +63,11 @@ except KeyError:
 
 else:
     # --------------------------- NEWS SET UP --------------------------------#
+
     # Get News API key to get latest news info
     key_news = os.environ.get("NEWS_API_KEY")
 
-    # 7 days forecast:
+    # Latest news, documentation: https://newsapi.org/docs
     parameters_news = {
         "qInTitle": COMPANY_NAME,
         "sortBy": "popularity",
@@ -82,6 +85,7 @@ else:
 
     # Set message, SMS alert conditions and send message
     text = ""
+
     if variation >= 2 or variation <= -2:
         for article in top_3:
             if variation >= 2:
@@ -90,6 +94,7 @@ else:
                 text = f"\n{COMPANY_NAME}: 🔻{variation}%\n"
             text += f"Headline: {article['title']}\n"
             text += f"Brief: {article['description']}\n"
+
         # Set Twilio SMS if conditions met
         message = client.messages \
             .create(
@@ -97,6 +102,7 @@ else:
                     from_="+19473338388",
                     to=contact
                     )
+        
         print(message.status)
 
     print(yesterday_closing)
