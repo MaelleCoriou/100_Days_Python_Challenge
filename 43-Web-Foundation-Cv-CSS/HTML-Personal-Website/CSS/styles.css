@@ -1,5 +1,7 @@
 body {
         background-color: #F1F7E7;
+        font-family: Roboto, Verdana, sans-serif;
+        font-size: 15px;
         }
 hr {
         border-style: dotted none none;
