@@ -1,0 +1,40 @@
+/************ TAGS SELECTORS **********/
+body {
+    background-color: orange;
+}
+h1 {
+    color: red;
+    font-size: 100px;
+}
+
+p {
+    text-align: center;
+    font-size: 25px;
+}
+
+img:hover {
+    background-color: gold;
+}
+
+/************ CLASS SELECTORS: CAN BE USED WITH SEVERAL ELEMENTS **********/
+.bacon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.corn {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.bg {
+    background-color: #E57C00;
+}
+/************ ID SELECTORS: SINGLE ELEMENT **********/
+
+#secondHeading {
+    color: yellow;
+    text-align: center;
+}
